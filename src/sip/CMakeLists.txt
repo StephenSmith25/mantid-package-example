@@ -25,7 +25,7 @@ if(NOT APPLE)
   set(PYTHON_LINK_LIBS ${PYTHON_LINK_LIBS} Python::Python)
 endif()
 
-target_link_libraries(PythonMessageBox Qt5::Core Qt5::Gui Qt5::Widgets
+target_link_libraries(PythonMessageBox Qt5::Core Qt5::Gui Qt5::Widgets MathFunctions
                       ${PYTHON_LINK_LIBS})
 target_include_directories(PythonMessageBox SYSTEM PRIVATE ${CMAKE_CURRENT_LIST_DIR}
                                                        ${SIP_INCLUDE_DIR})

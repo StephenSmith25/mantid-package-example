@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
 
     def display_cpp_message(self):
         cpp_msg = "This is from C++"
-        MessageBox(self, "Qt5 message", cpp_msg)
+        msgbox = MessageBox(self, "Qt5 message", cpp_msg)
 
 
 def main():

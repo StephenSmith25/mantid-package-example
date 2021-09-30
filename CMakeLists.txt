@@ -19,4 +19,7 @@ find_package(PyQt5 REQUIRED)
 find_package(SIP REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets)
 
+
+find_package(Boost)
+
 add_subdirectory(src)
