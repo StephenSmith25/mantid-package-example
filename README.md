@@ -1,0 +1,1 @@
+# mantid-package-example
