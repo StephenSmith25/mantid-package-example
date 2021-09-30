@@ -25,16 +25,17 @@ if(NOT APPLE)
   set(PYTHON_LINK_LIBS ${PYTHON_LINK_LIBS} Python::Python)
 endif()
 
-target_link_libraries(PythonMessageBox Qt5::Core Qt5::Gui Qt5::Widgets MathFunctions
-                      ${PYTHON_LINK_LIBS})
-target_include_directories(PythonMessageBox SYSTEM PRIVATE ${CMAKE_CURRENT_LIST_DIR}
-                                                       ${SIP_INCLUDE_DIR})
+target_link_libraries(PythonMessageBox Qt5::Core Qt5::Gui Qt5::Widgets
+                      MathFunctions ${PYTHON_LINK_LIBS})
+target_include_directories(PythonMessageBox SYSTEM
+                           PRIVATE ${CMAKE_CURRENT_LIST_DIR} ${SIP_INCLUDE_DIR})
 # No library prefixes
 set_target_properties(PythonMessageBox PROPERTIES PREFIX "")
 # Library name needs to end in .pyd for Windows
 if(MSVC)
   set_target_properties(
-    PythonMessageBox PROPERTIES SUFFIX .pyd COMPILE_FLAGS "/bigobj /w44005 /w44244"
+    PythonMessageBox PROPERTIES SUFFIX .pyd COMPILE_FLAGS
+                                            "/bigobj /w44005 /w44244"
   )# bigobj required for intensive templating
 elseif(APPLE)
   # and in .so on the Mac
@@ -45,5 +46,12 @@ set_target_properties(PythonMessageBox PROPERTIES OUTPUT_NAME "_message_box")
 
 if(APPLE)
   set_target_properties(PythonMessageBox PROPERTIES LINK_FLAGS
-                                                "-undefined dynamic_lookup")
+                                                    "-undefined dynamic_lookup")
 endif()
+
+install(
+  TARGETS PythonMessageBox
+  COMPONENT RUNTIME
+  DESTINATION ${MWINDOW_SITE_PACKAGES}/m_window
+  COMPONENT LIBRARY
+  DESTINATION ${MWINDOW_SITE_PACKAGES}/m_window)
