@@ -29,3 +29,10 @@ endif()
 
 add_subdirectory(construct)
 add_subdirectory(src)
+add_subdirectory(bundle-scripts)
+
+
+include(MWindowCPack)
+
+
+
