@@ -1,0 +1,33 @@
+name: MantidPython
+version: 0.1.0
+company: "Mantid Project"
+
+welcome_image_text: "MantidProject"
+header_image_text: "MantidProject"
+
+# see https://github.com/conda-forge/miniforge/blob/master/Miniforge3/construct.yaml
+channels:
+  # specifying the channel with the full URL adds two channels
+  # when the end user adds the channel without the full URL
+  # - https://conda.anaconda.org/conda-forge
+  - conda-forge
+
+write_condarc: True
+# keep pkgs for space-saving implications for hardlinks when create new environments
+# and keep the same with Miniconda
+keep_pkgs: True
+# license_file: ../LICENSEi
+
+specs:
+  - conda
+  - matplotlib
+  - numpy
+  - pandas
+  - pip
+  - python 3.8*
+  - scipy
+
+default_prefix: "%HOMEDRIVE%\\MWindowApp\\resources\\mantid_python"
+default_prefix_all_users: "%HOMEDRIVE%\\MWindowApp\\resources\\mantid_python"
+
+register_python_default: false

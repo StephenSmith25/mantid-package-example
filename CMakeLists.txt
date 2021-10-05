@@ -27,4 +27,5 @@ if(APPLE)
   set(MWINDOW_SITE_PACKAGES ${MWINDOW_BUNDLE}MacOS)
 endif()
 
+add_subdirectory(construct)
 add_subdirectory(src)

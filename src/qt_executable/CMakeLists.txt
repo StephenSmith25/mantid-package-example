@@ -40,66 +40,34 @@ install(
   BUNDLE DESTINATION . COMPONENT Runtime
   RUNTIME DESTINATION bin COMPONENT Runtime)
 
-include(InstallQt5Libs)
-
-# Determine location of QT libraries and frameworks
-get_property(
-  _Qt5_Widgets_LOCATION
-  TARGET Qt5::Widgets
-  PROPERTY LOCATION)
-get_filename_component(Qt_LIB_DIR "${_Qt5_Wigets_LOCATION}" PATH)
-if(APPLE)
-  get_filename_component(Qt_LIB_DIR "${Qt_LIB_DIR}" PATH)
-endif(APPLE)
-
-set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
-include(InstallRequiredSystemLibraries)
-
-# Apples bundle things
-# if(APPLE)
-#   set(BUNDLE_DIR "MWindowApp.app")
-#   install_qt5_plugin("Qt5::Widgets" plugins_to_fixup
-#                      "${BUNDLE_DIR}/Contents/Frameworks")
-
-#   # Qt config
-#   install(CODE "file(WRITE
-# \"\${CMAKE_INSTALL_PREFIX}/${BUNDLE_DIR}/Contents/Resources/qt.conf\"
-# \"[Paths]\nPlugins = plugins\nTranslations = i18n\n\")")
-
-#   # Qt plugins & bundle
-#   install(CODE " include(BundleUtilities)
-# fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${BUNDLE_DIR}\"
-# \"${plugins_to_fixup}\" \"${CMAKE_INSTALL_PREFIX}/${BUNDLE_DIR}/Contents/Frameworks\")")
-
-# endif()
 
 set(MY_DEPENDENCY_PATHS /usr/lib)
 install(CODE "set(MY_DEPENDENCY_PATHS \"${MY_DEPENDENCY_PATHS}\")")
 
 # This will analyse every otool dependency and copy it into the frameworks folder of the bundle
 # We probably then need to do something./..
-install(
-  CODE [[
-  file(GET_RUNTIME_DEPENDENCIES
-    EXECUTABLES $<TARGET_FILE:MWindowApp>
-    RESOLVED_DEPENDENCIES_VAR _r_deps
-    UNRESOLVED_DEPENDENCIES_VAR _u_deps
-    DIRECTORIES ${MY_DEPENDENCY_PATHS}
-  )
-  message("${_r_deps}")
-  foreach(_file ${_r_deps})
-    file(INSTALL
-      DESTINATION "${CMAKE_INSTALL_PREFIX}/MWindowApp.app/Contents/Frameworks"
-      TYPE SHARED_LIBRARY
-      FOLLOW_SYMLINK_CHAIN
-      FILES "${_file}"
-    )
-  endforeach()
-  list(LENGTH _u_deps _u_length)
-  if("${_u_length}" GREATER 0)
-    message(WARNING "Unresolved dependencies detected!")
-  endif()
-]])
+# install(
+#   CODE [[
+#   file(GET_RUNTIME_DEPENDENCIES
+#     EXECUTABLES $<TARGET_FILE:MWindowApp>
+#     RESOLVED_DEPENDENCIES_VAR _r_deps
+#     UNRESOLVED_DEPENDENCIES_VAR _u_deps
+#     DIRECTORIES ${MY_DEPENDENCY_PATHS}
+#   )
+#   message("${_r_deps}")
+#   foreach(_file ${_r_deps})
+#     file(INSTALL
+#       DESTINATION "${CMAKE_INSTALL_PREFIX}/MWindowApp.app/Contents/Frameworks"
+#       TYPE SHARED_LIBRARY
+#       FOLLOW_SYMLINK_CHAIN
+#       FILES "${_file}"
+#     )
+#   endforeach()
+#   list(LENGTH _u_deps _u_length)
+#   if("${_u_length}" GREATER 0)
+#     message(WARNING "Unresolved dependencies detected!")
+#   endif()
+# ]])
 # this will miss the qt plugins - and extra qt stuff, we should fix this
 # manually
 
@@ -151,6 +119,7 @@ endif()
 # Append Qt's lib folder which is two levels above Qt5Widgets_DIR
 list(APPEND DIRS "${Qt5Widgets_DIR}/../..")
 
+set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
 include(InstallRequiredSystemLibraries)
 
 message(STATUS "APPS: ${APPS}")
