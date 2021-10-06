@@ -1,5 +1,14 @@
 
-set(CPACK_GENERATOR "DragNDrop")
+set(CPACK_PACKAGE_NAME "MWindow")
+set(CPACK_PACKAGE_FILE_NAME "MWindow")
+set(CPACK_PACKAGE_VENDOR "Stephen Smith")
+set(CPACK_PACKAGE_DESCRIPTION "Test project for Mantid")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Test project for Mantid")
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 1)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+
+set(CPACK_GENERATOR "productbuild")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Stephen Smith") # required
 
 include(CPack)

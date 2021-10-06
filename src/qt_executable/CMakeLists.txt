@@ -35,11 +35,6 @@ elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
                                               "\$ORIGIN/../${LIB_DIR}")
 endif()
 
-install(
-  TARGETS MWindowApp
-  BUNDLE DESTINATION . COMPONENT Runtime
-  RUNTIME DESTINATION bin COMPONENT Runtime)
-
 set(MY_DEPENDENCY_PATHS /usr/lib)
 install(CODE "set(MY_DEPENDENCY_PATHS \"${MY_DEPENDENCY_PATHS}\")")
 
@@ -50,7 +45,6 @@ install( CODE
 LIBRARIES $<TARGET_FILE:Qt5::QCocoaIntegrationPlugin>
 RESOLVED_DEPENDENCIES_VAR _r_deps UNRESOLVED_DEPENDENCIES_VAR _u_deps
 DIRECTORIES ${MY_DEPENDENCY_PATHS} ) 
-message("${_r_deps}") 
 foreach(_file ${_r_deps}) 
 file(INSTALL DESTINATION
 "${CMAKE_INSTALL_PREFIX}/MWindowApp.app/Contents/Frameworks" TYPE
@@ -61,7 +55,7 @@ if("${_u_length}" GREATER 0)
 message(WARNING
 "Unresolved dependencies detected!")
  endif() 
- ]]) 
+]] COMPONENT Runtime) 
 # - and extra qt stuff, we should fix this manually
 
 set(prefix "MWindowApp.app/Contents")
@@ -78,7 +72,7 @@ macro(install_qt5_plugin_A _qt_plugin_name _qt_plugins_var _prefix)
     get_filename_component(_qt_plugin_type "${_qt_plugin_path}" PATH)
     get_filename_component(_qt_plugin_type "${_qt_plugin_type}" NAME)
     set(_qt_plugin_dest "${_prefix}/PlugIns/${_qt_plugin_type}")
-    install(FILES "${_qt_plugin_path}" DESTINATION "${_qt_plugin_dest}")
+    install(FILES "${_qt_plugin_path}" DESTINATION "${_qt_plugin_dest}" COMPONENT Runtime)
     set(${_qt_plugins_var}
         "${${_qt_plugins_var}};\$ENV{DEST_DIR}\${CMAKE_INSTALL_PREFIX}/${_qt_plugin_dest}/${_qt_plugin_file}"
     )
@@ -91,7 +85,7 @@ install_qt5_plugin_a("Qt5::QCocoaIntegrationPlugin" QT_PLUGINS ${prefix})
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
      "[Paths]\nPlugins = ${_qt_plugin_dir}\n")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
-        DESTINATION "${INSTALL_CMAKE_DIR}")
+        DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT Runtime)
 
 # Destination paths below are relative to ${CMAKE_INSTALL_PREFIX}
 install(
