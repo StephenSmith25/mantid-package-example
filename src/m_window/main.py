@@ -5,8 +5,7 @@ from qtpy.QtWidgets import QMainWindow, QApplication, QVBoxLayout, QPushButton, 
 # import qt from C++
 from .import_qt import import_qt
 
-MessageBox = import_qt('_message_box', '', 'MessageBox')
-
+MessageBox = import_qt('._message_box', 'm_window', 'MessageBox')
 USE_KERNEL = 'python3'
 
 from qtconsole.rich_jupyter_widget import RichJupyterWidget

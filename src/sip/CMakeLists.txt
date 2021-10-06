@@ -49,6 +49,15 @@ if(APPLE)
                                                     "-undefined dynamic_lookup")
 endif()
 
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  set_target_properties(PythonMessageBox PROPERTIES INSTALL_RPATH
+                                              "@loader_path/../")
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  set_target_properties(PythonMessageBox PROPERTIES INSTALL_RPATH
+                                              "\$ORIGIN/../")
+endif()
+
 install(
   TARGETS PythonMessageBox
   COMPONENT RUNTIME

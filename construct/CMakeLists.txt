@@ -17,5 +17,5 @@ file(GLOB CONDA_CONSTRUCT_ENV ${PATH_TO_CONSTRUCT}/env_installer/*.sh)
 # MWindowApp.app/Contents/Resources FILES_MATCHING
 # PATTERN "*.sh" PATTERN "tmp" EXCLUDE)
 
-# install(FILES ${CONDA_CONSTRUCT_ENV}
-#         DESTINATION MWindowApp.app/Contents/Resources COMPONENT Runtime)
+install(FILES ${CONDA_CONSTRUCT_ENV}
+        DESTINATION MWindowApp.app/Contents/Resources/env_installer COMPONENT Runtime)
