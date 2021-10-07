@@ -30,7 +30,7 @@ specs:
   - qtconsole=5.0.3
   - scipy
 
-default_prefix: "%HOMEDRIVE%\\MWindowApp\\resources\\mantid_python"
-default_prefix_all_users: "%HOMEDRIVE%\\MWindowApp\\resources\\mantid_python"
+default_prefix: "%HOMEDRIVE%\\MantidPrototype\\resources\\mantid_python"
+default_prefix_all_users: "%HOMEDRIVE%\\MantidPrototype\\resources\\mantid_python"
 
 register_python_default: false

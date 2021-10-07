@@ -10,6 +10,6 @@ target_compile_definitions(python_lib PRIVATE VERSION_INFO="0.1.0")
 install(
   TARGETS python_lib
   COMPONENT RUNTIME
-  DESTINATION ${MWINDOW_BIN_DIR}
+  DESTINATION ${MantidPrototype_BIN_DIR}
   COMPONENT LIBRARY
-  DESTINATION ${MWINDOW_LIB_DIR})
+  DESTINATION ${MantidPrototype_LIB_DIR})

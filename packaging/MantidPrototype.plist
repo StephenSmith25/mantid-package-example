@@ -12,7 +12,7 @@
         <key>BundleOverwriteAction</key>
         <string>upgrade</string>
         <key>RootRelativeBundlePath</key>
-        <string>Applications/MWindowApp.app</string>
+        <string>Applications/MantidPrototype.app</string>
     </dict>
 </array>
 </plist>

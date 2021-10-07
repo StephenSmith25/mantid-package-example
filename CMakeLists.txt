@@ -21,10 +21,10 @@ find_package(Qt5 COMPONENTS Core Gui Widgets)
 find_package(Boost)
 
 if(APPLE)
-  set(MWINDOW_BUNDLE MWindowApp.app/Contents/)
-  set(MWINDOW_BIN_DIR ${MWINDOW_BUNDLE}MacOS)
-  set(MWINDOW_LIB_DIR ${MWINDOW_BUNDLE}MacOS)
-  set(MWINDOW_SITE_PACKAGES ${MWINDOW_BUNDLE}MacOS)
+  set(MantidPrototype_BUNDLE MantidPrototype.app/Contents/)
+  set(MantidPrototype_BIN_DIR ${MantidPrototype_BUNDLE}MacOS)
+  set(MantidPrototype_LIB_DIR ${MantidPrototype_BUNDLE}MacOS)
+  set(MantidPrototype_SITE_PACKAGES ${MantidPrototype_BUNDLE}MacOS)
 endif()
 
 add_subdirectory(src)
@@ -32,7 +32,7 @@ add_subdirectory(construct)
 #add_subdirectory(bundle-scripts)
 
 
-include(MWindowCPack)
+include(MantidPrototypeCPack)
 
 
 

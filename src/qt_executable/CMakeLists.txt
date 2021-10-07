@@ -18,20 +18,20 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets)
 set(MACOSX_BUNDLE_ICON_FILE icon.icns)
 
 # And this part tells CMake where to find and install the file itself
-set(MWindowApp_ICON ${CMAKE_SOURCE_DIR}/install/icons/icon.icns)
-set_source_files_properties(${MWindowApp_ICON}
+set(MantidPrototype_ICON ${CMAKE_SOURCE_DIR}/install/icons/icon.icns)
+set_source_files_properties(${MantidPrototype_ICON}
                             PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 add_executable(
-  MWindowApp MACOSX_BUNDLE ${MWindowApp_ICON} main.cpp mainwindow.cpp
+  MantidPrototype MACOSX_BUNDLE ${MantidPrototype_ICON} main.cpp mainwindow.cpp
                            mainwindow.ui resources.qrc)
-target_link_libraries(MWindowApp Qt5::Widgets)
+target_link_libraries(MantidPrototype Qt5::Widgets)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  set_target_properties(MWindowApp PROPERTIES INSTALL_RPATH
+  set_target_properties(MantidPrototype PROPERTIES INSTALL_RPATH
                                               "@loader_path/../Frameworks")
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  set_target_properties(MWindowApp PROPERTIES INSTALL_RPATH
+  set_target_properties(MantidPrototype PROPERTIES INSTALL_RPATH
                                               "\$ORIGIN/../${LIB_DIR}")
 endif()
 
@@ -41,13 +41,13 @@ install(CODE "set(MY_DEPENDENCY_PATHS \"${MY_DEPENDENCY_PATHS}\")")
 # This will analyse every otool dependency and copy it into the frameworks
 # folder of the bundle We probably then need to do something./.. 
 install( CODE
-[[ file(GET_RUNTIME_DEPENDENCIES EXECUTABLES $<TARGET_FILE:MWindowApp>
+[[ file(GET_RUNTIME_DEPENDENCIES EXECUTABLES $<TARGET_FILE:MantidPrototype>
 LIBRARIES $<TARGET_FILE:Qt5::QCocoaIntegrationPlugin>
 RESOLVED_DEPENDENCIES_VAR _r_deps UNRESOLVED_DEPENDENCIES_VAR _u_deps
 DIRECTORIES ${MY_DEPENDENCY_PATHS} ) 
 foreach(_file ${_r_deps}) 
 file(INSTALL DESTINATION
-"${CMAKE_INSTALL_PREFIX}/MWindowApp.app/Contents/Frameworks" TYPE
+"${CMAKE_INSTALL_PREFIX}/MantidPrototype.app/Contents/Frameworks" TYPE
 SHARED_LIBRARY FOLLOW_SYMLINK_CHAIN FILES "${_file}" ) 
 endforeach()
 list(LENGTH _u_deps _u_length) 
@@ -58,7 +58,7 @@ message(WARNING
 ]] COMPONENT Runtime) 
 # - and extra qt stuff, we should fix this manually
 
-set(prefix "MWindowApp.app/Contents")
+set(prefix "MantidPrototype.app/Contents")
 set(INSTALL_RUNTIME_DIR "${prefix}/MacOS")
 set(INSTALL_CMAKE_DIR "${prefix}/Resources")
 
@@ -89,12 +89,12 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
 
 # Destination paths below are relative to ${CMAKE_INSTALL_PREFIX}
 install(
-  TARGETS MWindowApp
+  TARGETS MantidPrototype
   BUNDLE DESTINATION . COMPONENT Runtime
   RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR} COMPONENT Runtime)
 
 # Note Mac specific extension .app
-set(APPS "\${CMAKE_INSTALL_PREFIX}/MWindowApp.app")
+set(APPS "\${CMAKE_INSTALL_PREFIX}/MantidPrototype.app")
 
 # Directories to look for dependencies
 set(DIRS "${CMAKE_BINARY_DIR}")

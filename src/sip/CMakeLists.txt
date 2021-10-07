@@ -60,6 +60,6 @@ endif()
 install(
   TARGETS PythonMessageBox
   COMPONENT RUNTIME
-  DESTINATION ${MWINDOW_SITE_PACKAGES}/m_window
+  DESTINATION ${MantidPrototype_SITE_PACKAGES}/m_window
   COMPONENT LIBRARY
-  DESTINATION ${MWINDOW_SITE_PACKAGES}/m_window)
+  DESTINATION ${MantidPrototype_SITE_PACKAGES}/m_window)

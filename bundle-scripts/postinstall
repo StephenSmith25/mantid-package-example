@@ -2,6 +2,6 @@
 set -x #echo on
 
 
-sh /Applications/MWindowApp.app/Contents/Resources/env_installer/MantidPython-0.1.0-MacOSX-x86_64.sh -b -u -p /Applications/MWindowApp.app/Contents/Resources/mantid_python >> ~/Documents/error.txt 2>&1
+sh /Applications/MantidPrototype.app/Contents/Resources/env_installer/MantidPython-0.1.0-MacOSX-x86_64.sh -b -u -p /Applications/MantidPrototype.app/Contents/Resources/mantid_python >> ~/Documents/error.txt 2>&1
 
 exit 0

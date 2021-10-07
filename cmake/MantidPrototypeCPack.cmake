@@ -1,5 +1,5 @@
-set(CPACK_PACKAGE_NAME "MWindow")
-set(CPACK_PACKAGE_FILE_NAME "MWindow")
+set(CPACK_PACKAGE_NAME "MantidPrototype")
+set(CPACK_PACKAGE_FILE_NAME "MantidPrototype")
 set(CPACK_PACKAGE_VENDOR "Stephen Smith")
 set(CPACK_SET_DESTDIR true)
 set(CPACK_INSTALL_PREFIX "/Applications")
@@ -21,4 +21,4 @@ cpack_add_component(
   Runtime
   DISPLAY_NAME Runtime
   DESCRIPTION "Runtime of window application" PLIST
-                        ${PROJECT_SOURCE_DIR}/packaging/mwindow.plist)
+                        ${PROJECT_SOURCE_DIR}/packaging/MantidPrototype.plist)
