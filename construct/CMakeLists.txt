@@ -1,15 +1,15 @@
 set(PATH_TO_CONSTRUCT ${PROJECT_SOURCE_DIR}/construct)
 
-message(" Creating conda construct python package ")
-execute_process(
-  COMMAND constructor ${PATH_TO_CONSTRUCT}
-          --output-dir=${PATH_TO_CONSTRUCT}/env_installer
-  WORKING_DIRECTORY ${PATH_TO_CONSTRUCT}
-  RESULT_VARIABLE construct_result
-  OUTPUT_VARIABLE construct_output COMMAND_ECHO STDOUT)
-message(
-  "Finished creating conda construct env: ${construct_result} ${construct_output} "
-)
+# message(" Creating conda construct python package ")
+# execute_process(
+#   COMMAND constructor ${PATH_TO_CONSTRUCT}
+#           --output-dir=${PATH_TO_CONSTRUCT}/env_installer
+#   WORKING_DIRECTORY ${PATH_TO_CONSTRUCT}
+#   RESULT_VARIABLE construct_result
+#   OUTPUT_VARIABLE construct_output COMMAND_ECHO STDOUT)
+# message(
+#   "Finished creating conda construct env: ${construct_result} ${construct_output} "
+# )
 
 file(GLOB CONDA_CONSTRUCT_ENV ${PATH_TO_CONSTRUCT}/env_installer/*.sh)
 
