@@ -81,20 +81,36 @@ specs:
 which would create a package named "MyPackage" which installs conda and python. Jupyter bundle a conda constructor installer (in the form a shell script) into their application bundle. While installing Juypterlab_app this shell script is executed, placing a full conda python package into their application. The GUI application can then launch and use this python environment.  
 
 
-How do you run it?
+## Build instructions
 
 - Create the conda environment
 ```
+conda env create -f ./developer-env.yml
+conda activate mantid-package
 ```
 - Setup the build
 ```
-```
 mkdir build
 cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=../../my_install_folder
+```
+- Run the build
+```
+make -j4
+make install
+cpack
+```
 
+## The .pkg installer 
+The above steps should create a .pkg installer in the build folder. The pkg contains a conda constructor installer for a python environment. This environment would contain all the python dependencies required by mantid. It is automatially installed with a postinstall script during the package installation. This script contains the following:
+```
+#!/bin/bash
 
+sh /Applications/MantidPrototype.app/Contents/Resources/env_installer/MantidPython-0.1.0-MacOSX-x86_64.sh -b -u -p /Applications/MantidPrototype.app/Contents/Resources/mantid_python
+exit 0
+```
 
-What does it do? Creates a .pkg installer on osx, which one executed installs a package in Applications with the following layout:
+Once the pkg is executed it installs a package in Applications with the following layout:
 ```
 MantidPrototype
 │
@@ -114,7 +130,7 @@ MantidPrototype
 ```
 
 
-The `mantid_python` folder contains our full python environment created using the installer from conda constructor. E.g it may look something like
+The `mantid_python` folder contains our full python environment created using the postinstall script and the installer from conda constructor. It would look something like
 
 ```
 mantid_python
@@ -122,12 +138,14 @@ mantid_python
 └───lib
 │   │- libqt5gui
 │   │- libc++
-│   │
+│   
+│
 └───bin
     │- conda
     │- python
 ```
 
+If we ran `source activate ../Resources/mantid_python/bin` in the MacOS folder we would activate conda for that current shell. Meaning if we next launched python we would be inside our mantid_python environment. We could hyothetically combine these steps to create a suitable launch script Presumably the juypter app does something similar.
 
 
 ## Concerns
