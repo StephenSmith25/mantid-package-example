@@ -29,4 +29,4 @@ add_custom_target(ConstructorEnv ALL
 # PATTERN "*.sh" PATTERN "tmp" EXCLUDE)
 
 install(FILES ${OUTPUT_ENV}
-        DESTINATION MantidPrototype.app/Contents/Resources/env_installer COMPONENT Runtime)
+        DESTINATION resources/env_installer COMPONENT Runtime)

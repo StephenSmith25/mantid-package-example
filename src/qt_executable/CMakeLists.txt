@@ -57,30 +57,17 @@ message(WARNING
 "Unresolved dependencies detected!")
  endif() 
 ]] COMPONENT Runtime)
-elseif(WIN32)
-install( CODE 
-[[ file(GET_RUNTIME_DEPENDENCIES EXECUTABLES $<TARGET_FILE:MantidPrototype>
-RESOLVED_DEPENDENCIES_VAR _r_deps UNRESOLVED_DEPENDENCIES_VAR _u_deps
-DIRECTORIES ${MY_DEPENDENCY_PATHS} ) 
-foreach(_file ${_r_deps}) 
-file(INSTALL DESTINATION
-"${CMAKE_INSTALL_PREFIX}/MantidPrototype.app/Contents/Frameworks" TYPE
-SHARED_LIBRARY FOLLOW_SYMLINK_CHAIN FILES "${_file}" ) 
-endforeach()
-list(LENGTH _u_deps _u_length) 
-if("${_u_length}" GREATER 0) 
-message(WARNING
-"Unresolved dependencies detected!")
- endif() 
-]] COMPONENT Runtime)
-
-
 endif() 
 # - and extra qt stuff, we should fix this manually
-
+if (APPLE)
 set(prefix "MantidPrototype.app/Contents")
 set(INSTALL_RUNTIME_DIR "${prefix}/MacOS")
 set(INSTALL_CMAKE_DIR "${prefix}/Resources")
+elseif(WIN32)
+set(prefix ".")
+set(INSTALL_RUNTIME_DIR "bin")
+set(INSTALL_CMAKE_DIR "lib")
+endif()
 
 set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
 include(InstallRequiredSystemLibraries)
@@ -92,7 +79,11 @@ macro(install_qt5_plugin_A _qt_plugin_name _qt_plugins_var _prefix)
     get_filename_component(_qt_plugin_type "${_qt_plugin_path}" PATH)
     get_filename_component(_qt_plugin_type "${_qt_plugin_type}" NAME)
     set(_qt_plugin_dest "${_prefix}/PlugIns/${_qt_plugin_type}")
+    if (APPLE)
     install(FILES "${_qt_plugin_path}" DESTINATION "${_qt_plugin_dest}" COMPONENT Runtime)
+    else()
+    install(FILES "${_qt_plugin_path}" DESTINATION "${_prefix}/bin/${_qt_plugin_type}" COMPONENT Runtime)
+    endif()
     set(${_qt_plugins_var}
         "${${_qt_plugins_var}};\$ENV{DEST_DIR}\${CMAKE_INSTALL_PREFIX}/${_qt_plugin_dest}/${_qt_plugin_file}"
     )
@@ -107,15 +98,25 @@ file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
      "[Paths]\nPlugins = ${_qt_plugin_dir}\n")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
         DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT Runtime)
+elseif(WIN32)
+install_qt5_plugin_a("Qt5::QWindowsIntegrationPlugin" QT_PLUGINS ${prefix})
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
+     "[Paths]\nPlugins = ${_qt_plugin_dir}\n")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
+        DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT Runtime)
 endif()
+
 # Destination paths below are relative to ${CMAKE_INSTALL_PREFIX}
 install(
   TARGETS MantidPrototype
   BUNDLE DESTINATION . COMPONENT Runtime
-  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR} COMPONENT Runtime)
+  RUNTIME DESTINATION ${MantidPrototype_BIN_DIR} COMPONENT Runtime)
 
 # Note Mac specific extension .app
-set(APPS "\${CMAKE_INSTALL_PREFIX}/MantidPrototype.app")
+
+if (WIN32)
+set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/MantidPrototype.exe")
+endif()
 
 # Directories to look for dependencies
 set(DIRS "${CMAKE_BINARY_DIR}")
@@ -123,7 +124,9 @@ set(DIRS "${CMAKE_BINARY_DIR}")
 # Path used for searching by FIND_XXX(), with appropriate suffixes added
 if(CMAKE_PREFIX_PATH)
   foreach(dir ${CMAKE_PREFIX_PATH})
-    list(APPEND DIRS "${dir}/bin" "${dir}/lib")
+  file(TO_CMAKE_PATH "${dir}/bin" bin_path)
+  file(TO_CMAKE_PATH "${dir}/lib" lib_path)
+  list(APPEND DIRS ${bin_path} ${lib_path})
   endforeach()
 endif()
 
@@ -147,8 +150,9 @@ message(STATUS "DIRS: ${DIRS}")
 #   endif()
 # endfunction()
 
-# install(CODE "
-# include(BundleUtilities)
-# set(BU_CHMOD_BUNDLE_ITEMS ON)
-# fixup_bundle(\"${APPS}\" \"${QT_PLUGINS}\" \"${DIRS}\")
-# ")
+
+install(CODE "
+include(BundleUtilities)
+set(BU_CHMOD_BUNDLE_ITEMS ON)
+fixup_bundle(\"${APPS}\" \"${QT_PLUGINS}\" \"${DIRS}\")
+")
