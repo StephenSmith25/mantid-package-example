@@ -10,9 +10,6 @@ if(WIN32)
   set(CMAKE_WIN32_EXECUTABLE ON)
 endif()
 
-# Find the QtWidgets library
-find_package(Qt5 REQUIRED COMPONENTS Widgets)
-
 # NOTE: Don't include the path in MACOSX_BUNDLE_ICON_FILE -- this is the
 # property added to Info.plist
 set(MACOSX_BUNDLE_ICON_FILE icon.icns)
@@ -130,7 +127,15 @@ if(CMAKE_PREFIX_PATH)
   endforeach()
 endif()
 
+# if win32 we should install the EG and GLES libraries as well
+if(WIN32)
+install(FILES $<TARGET_FILE:Qt5::Gui_EGL> $<TARGET_FILE:Qt5::Gui_GLESv2>
+        DESTINATION ${MantidPrototype_BIN_DIR}
+       COMPONENT Runtime)
+endif()
+
 # Append Qt's lib folder which is two levels above Qt5Widgets_DIR
+list(APPEND DIRS "${Qt5Widgets_DIR}/../..")
 list(APPEND DIRS "${Qt5Widgets_DIR}/../..")
 
 set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
@@ -150,9 +155,12 @@ message(STATUS "DIRS: ${DIRS}")
 #   endif()
 # endfunction()
 
-
+# unsure whether we do this on osx as well 
+# TODO: probably worth looking at why paraview have their own BundleUtiltiies file.
+if (WIN32)
 install(CODE "
 include(BundleUtilities)
 set(BU_CHMOD_BUNDLE_ITEMS ON)
 fixup_bundle(\"${APPS}\" \"${QT_PLUGINS}\" \"${DIRS}\")
 ")
+endif()

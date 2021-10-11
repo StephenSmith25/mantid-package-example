@@ -17,18 +17,19 @@ find_package(Python ${MINIMUM_PYTHON_VERSION} REQUIRED
 find_package(PyQt5 REQUIRED)
 find_package(SIP REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets)
-
 find_package(Boost)
 
 if(APPLE)
+  # On apple we should lay out the libs and binaries so they adhere to a "normal" bundle layout.
   set(MantidPrototype_BUNDLE MantidPrototype.app/Contents/)
   set(MantidPrototype_BIN_DIR ${MantidPrototype_BUNDLE}MacOS)
   set(MantidPrototype_LIB_DIR ${MantidPrototype_BUNDLE}MacOS)
   set(MantidPrototype_SITE_PACKAGES ${MantidPrototype_BUNDLE}MacOS)
 elseif(WIN32)
+  # I guess on windows we put the dlls in the build folder so they can be found at runtime.
   set(MantidPrototype_BIN_DIR bin)
-  set(MantidPrototype_LIB_DIR lib)
-  set(MantidPrototype_SITE_PACKAGES lib)
+  set(MantidPrototype_LIB_DIR bin)
+  set(MantidPrototype_SITE_PACKAGES bin)
 endif()
 
 

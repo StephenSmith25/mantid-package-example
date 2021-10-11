@@ -1,6 +1,7 @@
 set(CPACK_PACKAGE_NAME "MantidPrototype")
 set(CPACK_PACKAGE_FILE_NAME "MantidPrototype")
 set(CPACK_PACKAGE_VENDOR "Stephen Smith")
+if (APPLE)
 set(CPACK_SET_DESTDIR true)
 set(CPACK_INSTALL_PREFIX "/Applications")
 set(CPACK_PACKAGING_INSTALL_PREFIX "/Applications")
@@ -22,3 +23,19 @@ cpack_add_component(
   DISPLAY_NAME Runtime
   DESCRIPTION "Runtime of window application" PLIST
                         ${PROJECT_SOURCE_DIR}/packaging/MantidPrototype.plist)
+
+elseif(WIN32)
+set(CPACK_GENERATOR "NSIS")
+
+include(CPack)
+
+cpack_add_component(
+  Runtime
+  DISPLAY_NAME Runtime
+  DESCRIPTION "Runtime of window application" PLIST
+                        ${PROJECT_SOURCE_DIR}/packaging/MantidPrototype.plist)
+
+elseif(WIN32)
+
+
+endif()
