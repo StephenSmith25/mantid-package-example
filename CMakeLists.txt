@@ -25,7 +25,13 @@ if(APPLE)
   set(MantidPrototype_BIN_DIR ${MantidPrototype_BUNDLE}MacOS)
   set(MantidPrototype_LIB_DIR ${MantidPrototype_BUNDLE}MacOS)
   set(MantidPrototype_SITE_PACKAGES ${MantidPrototype_BUNDLE}MacOS)
+elseif(WIN32)
+  set(MantidPrototype_BIN_DIR bin)
+  set(MantidPrototype_LIB_DIR lib)
+  set(MantidPrototype_SITE_PACKAGES lib)
 endif()
+
+
 
 add_subdirectory(src)
 add_subdirectory(construct)

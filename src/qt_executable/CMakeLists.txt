@@ -40,6 +40,7 @@ install(CODE "set(MY_DEPENDENCY_PATHS \"${MY_DEPENDENCY_PATHS}\")")
 
 # This will analyse every otool dependency and copy it into the frameworks
 # folder of the bundle We probably then need to do something./.. 
+if (APPLE)
 install( CODE
 [[ file(GET_RUNTIME_DEPENDENCIES EXECUTABLES $<TARGET_FILE:MantidPrototype>
 LIBRARIES $<TARGET_FILE:Qt5::QCocoaIntegrationPlugin>
@@ -55,7 +56,26 @@ if("${_u_length}" GREATER 0)
 message(WARNING
 "Unresolved dependencies detected!")
  endif() 
-]] COMPONENT Runtime) 
+]] COMPONENT Runtime)
+elseif(WIN32)
+install( CODE 
+[[ file(GET_RUNTIME_DEPENDENCIES EXECUTABLES $<TARGET_FILE:MantidPrototype>
+RESOLVED_DEPENDENCIES_VAR _r_deps UNRESOLVED_DEPENDENCIES_VAR _u_deps
+DIRECTORIES ${MY_DEPENDENCY_PATHS} ) 
+foreach(_file ${_r_deps}) 
+file(INSTALL DESTINATION
+"${CMAKE_INSTALL_PREFIX}/MantidPrototype.app/Contents/Frameworks" TYPE
+SHARED_LIBRARY FOLLOW_SYMLINK_CHAIN FILES "${_file}" ) 
+endforeach()
+list(LENGTH _u_deps _u_length) 
+if("${_u_length}" GREATER 0) 
+message(WARNING
+"Unresolved dependencies detected!")
+ endif() 
+]] COMPONENT Runtime)
+
+
+endif() 
 # - and extra qt stuff, we should fix this manually
 
 set(prefix "MantidPrototype.app/Contents")
@@ -81,12 +101,13 @@ macro(install_qt5_plugin_A _qt_plugin_name _qt_plugins_var _prefix)
   endif()
 endmacro()
 
+if (APPLE)
 install_qt5_plugin_a("Qt5::QCocoaIntegrationPlugin" QT_PLUGINS ${prefix})
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
      "[Paths]\nPlugins = ${_qt_plugin_dir}\n")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/qt.conf"
         DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT Runtime)
-
+endif()
 # Destination paths below are relative to ${CMAKE_INSTALL_PREFIX}
 install(
   TARGETS MantidPrototype
