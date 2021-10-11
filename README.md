@@ -156,4 +156,9 @@ Some duplicated binaries. For instance, on Mac we typically bundle the qt librar
 
 I don't think this a particular issue outside of duplication (e.g a bigger package). THe alternative would be to not bundle qt in Frameworks and modify the `rpath` of binaries reliant on qt to point at `MantidPrototype/Contents/Resources/mantid_python/lib`
 
+To pip install packages into the environment you'll have to run chown on the application on osx and linux, e.g
+```
+sudo chown -R username /opt/MantidWorkbench or on OSX
+sudo chown -R username /Applications/MantidWorkbench 
+```
 # Prototype design #2
