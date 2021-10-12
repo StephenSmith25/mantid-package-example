@@ -1,0 +1,16 @@
+;--- Mantid Custom Install Configuration ---
+
+!macro preInit
+	SetRegView 64
+	WriteRegExpandStr HKLM "${INSTALL_REGISTRY_KEY}" InstallLocation "C:\MantidPrototype"
+	WriteRegExpandStr HKCU "${INSTALL_REGISTRY_KEY}" InstallLocation "C:\MantidPrototype"
+!macroend
+
+!macro customInstall
+	ExecWait "$INSTDIR\resources\env_installer\MantidPython-0.1.0-Windows-x86_64.exe"
+	${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR"
+!macroend
+
+!macro customUnInstall
+	${un.EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR"
+!macroend

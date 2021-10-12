@@ -78,12 +78,15 @@ macro(install_qt5_plugin_A _qt_plugin_name _qt_plugins_var _prefix)
     set(_qt_plugin_dest "${_prefix}/PlugIns/${_qt_plugin_type}")
     if (APPLE)
     install(FILES "${_qt_plugin_path}" DESTINATION "${_qt_plugin_dest}" COMPONENT Runtime)
+    set(${_qt_plugins_var}
+    "${${_qt_plugins_var}};\$ENV{DEST_DIR}\${CMAKE_INSTALL_PREFIX}/${_qt_plugin_dest}/${_qt_plugin_file}"
+     )
     else()
     install(FILES "${_qt_plugin_path}" DESTINATION "${_prefix}/bin/${_qt_plugin_type}" COMPONENT Runtime)
-    endif()
     set(${_qt_plugins_var}
-        "${${_qt_plugins_var}};\$ENV{DEST_DIR}\${CMAKE_INSTALL_PREFIX}/${_qt_plugin_dest}/${_qt_plugin_file}"
+    "${${_qt_plugins_var}};\$ENV{DEST_DIR}\${CMAKE_INSTALL_PREFIX}/bin/${_qt_plugin_type}/${_qt_plugin_file}"
     )
+    endif()
   else()
     message(FATAL_ERROR "QT plugin ${_qt_plugin_name} not found")
   endif()
@@ -107,7 +110,7 @@ endif()
 install(
   TARGETS MantidPrototype
   BUNDLE DESTINATION . COMPONENT Runtime
-  RUNTIME DESTINATION ${MantidPrototype_BIN_DIR} COMPONENT Runtime)
+  RUNTIME DESTINATION bin COMPONENT Runtime)
 
 # Note Mac specific extension .app
 
@@ -144,6 +147,9 @@ include(InstallRequiredSystemLibraries)
 message(STATUS "APPS: ${APPS}")
 message(STATUS "QT_PLUGINS: ${QT_PLUGINS}")
 message(STATUS "DIRS: ${DIRS}")
+install(CODE "message(STATUS \"${APPS}}\")")
+install(CODE "message(STATUS \"${QT_PLUGINS}\")")
+install(CODE "message(STATUS \"${DIRS}\")")
 
 # function(gp_resolved_file_type_override resolved_file type_var)
 #   message(\"resolving \${resolved_file} as \${type_var}\")
@@ -162,5 +168,5 @@ install(CODE "
 include(BundleUtilities)
 set(BU_CHMOD_BUNDLE_ITEMS ON)
 fixup_bundle(\"${APPS}\" \"${QT_PLUGINS}\" \"${DIRS}\")
-")
+" COMPONENT Runtime)
 endif()
